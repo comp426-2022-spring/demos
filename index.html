@@ -1,0 +1,57 @@
+<html>
+	<head>
+		<title>Demo Coin</title>
+		<style>
+			img {
+				width: 100;
+			}
+		</style>
+	</head>
+	<body>
+
+<!-- Get a person to flip a coin 
+	button
+		image-->
+		<button id="coin">Flip?</button>
+
+		<p>Result: <span id="result"></span></p>
+
+		<img id="quarter" src="coin.jpg">
+
+<!-- Call a coin flip heads or tails (guess) -->
+
+<!-- Flip a bunch of coins -->
+
+		<script>
+// Event listener for whatever is being clicked 
+//			document.addEventListener("click", activeNow);
+// Replace text in anything with "active" id
+			// function activeNow() {
+			// 	const active_now = document.activeElement
+			// 	document.getElementById("active").innerHTML = active_now;
+			// 	console.log(active_now)
+			// }
+// Button coin flip element
+			const coin = document.getElementById("coin");
+// Add event listener for coin button
+			coin.addEventListener("click", flipCoin);
+			function flipCoin() {
+			  fetch('http://code.johndmart.in:5000/app/flip/', {mode: 'cors'})
+  				.then(function(response) {
+    			  return response.json();
+  				})
+  				.then(function(json) {
+    			  console.log('Request successful. Response:', json);
+				  document.getElementById("result").innerHTML = json.flip;
+				  document.getElementById("quarter").setAttribute("src", json.flip+".jpg");
+				  coin.disabled = true
+  				})
+  				.catch(function(error) {
+    			  console.log('Request failed', error);
+				  document.getElementById("result").innerText = "no response from server"
+  				});
+			}
+		</script>
+	</body>
+</html>
+<!-- Coin images from https://www.usmint.gov/coins/coin-medal-programs/50-state-quarters/north-carolina -->
