@@ -1,0 +1,107 @@
+<html>
+	<head>
+		<title>Demo Coin</title>
+		<style>
+			img#quarter {
+				width: 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="single">
+			<h1>Flip one coin</h1>
+<!-- A "coin" button -->
+			<button id="coin">Flip?</button>
+<!-- A status paragraph -->
+			<p id="active"></p>
+<!-- A result paragraph-->
+			<p>Result: <span id="result"></span></p>
+<!-- An image of a US quarter (North Carolina variant) -->
+			<img src="coin.jpg" id="quarter">
+		</div>
+		<div id="multi">
+			<h1>Flip many coins</h1>
+<!-- A form to submit a number for a bunch of coin flips-->
+			<form id="coins" action="">
+				<label>
+					<strong>How many coins?</strong>
+					<input type="text" name="number" id="number">
+				</label>
+				<input type="submit" value="flip">
+			</form>
+			
+			<p>Results:</p> 
+			<p id="heads"></p>
+			<p id="tails"></p>
+		</div>
+		<script>
+// Button coin flip element
+			const coin = document.getElementById("coin")
+// Add event listener for coin button
+			coin.addEventListener("click", flipCoin)
+// Create GET request to API endpoint /app/flip
+			async function flipCoin() {
+				// Prevent the browser from doing the default action of redirecting after submit
+				event.preventDefault();
+				const base = document.baseURI
+				const endpoint = "app/flip/"
+                await fetch( base+endpoint, {mode: "cors"})
+  				.then(function(response) {
+    			  return response.json();
+  				})
+				.then(function(result) {
+					console.log(result);
+					document.getElementById("result").innerHTML = result.flip;
+					document.getElementById("quarter").setAttribute("src", result.flip+".jpg");
+					//coin.disabled = true
+				})
+			}
+// Create POST request to API endpoint /app/flip/coins/
+			const coins = document.getElementById("coins");
+			coins.addEventListener("submit", flipCoins);
+
+
+ 			async function sendFlips({ url, formData }) {
+				const plainFormData = Object.fromEntries(formData.entries());
+				const formDataJsonString = JSON.stringify(plainFormData);
+
+				const fetchOptions = {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						Accept: "application/json",
+					},
+					body: formDataJsonString,
+				};
+
+				const response = await fetch(url, fetchOptions);
+
+				if (!response.ok) {
+					const errorMessage = await response.text();
+					throw new Error(errorMessage);
+				}
+
+				return response.json();
+			}
+
+			async function flipCoins(event) {
+				event.preventDefault();
+
+				const formEvent = event.currentTarget;
+				const endpoint = "app/flip/coins/"
+				const url = document.baseURI+endpoint;
+
+				try {
+					const formData = new FormData(formEvent);
+					const flips = await sendFlips({ url, formData });
+
+					console.log({ flips });
+					document.getElementById("heads").innerHTML = "Heads:"+flips.summary.heads;
+					document.getElementById("tails").innerHTML = "Tails:"+flips.summary.tails;
+				} catch (error) {
+					console.error(error);
+				}
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "2022-03-29-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx browser-sync -sw --no-open --no-ui"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "browsersync": "^0.0.1-security"
+  }
+}

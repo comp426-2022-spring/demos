@@ -1,0 +1,22 @@
+{
+  "name": "a04-draft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "GPL-3.0-or-later",
+  "dependencies": {
+    "better-sqlite3": "^7.5.0",
+    "cors": "^2.8.5",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.3",
+    "minimist": "^1.2.5",
+    "morgan": "^1.10.0",
+    "morgan-json": "^1.1.0",
+    "winston": "^3.6.0"
+  }
+}
